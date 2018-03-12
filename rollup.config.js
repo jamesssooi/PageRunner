@@ -1,7 +1,6 @@
 import path from 'path';
 import resolve from 'rollup-plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
-import uglify from 'rollup-plugin-uglify';
 
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
@@ -29,9 +28,6 @@ export default {
     typescript({
       typescript: require('typescript'),
     }),
-
-    /** Minify output when building for production */
-    IS_PRODUCTION ? uglify() : {}
   ]
 
 }
