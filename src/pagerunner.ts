@@ -42,11 +42,16 @@ class PageRunner {
     const pages = this.pages.slice();
 
     // Add new page if it hasn't been registered
-    pages.forEach((page) => {
-      if (page.name === pageName) {
-        pages.push({ name: pageName, resolved: false, functions: [] });
+    let found = false;
+    for (let i = 0; i < pages.length; i++) {
+      if (pages[i].name === pageName) {
+        found = true;
+        break;
       }
-    });
+    }
+    if (!found) {
+      pages.push({ name: pageName, resolved: false, functions: [] })
+    }
 
     // Register new function
     this.pages = pages.map((page) => {
