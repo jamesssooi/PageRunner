@@ -21,9 +21,9 @@ class PageRunner {
 
   // Class Properties ------------------------------------------------------- */
 
-  options: PageRunner.Options;
-  pages: PageRunner.Page[];
-  globals: Function[];
+  options: PageRunner.Options = {};
+  pages: PageRunner.Page[] = [];
+  globals: Function[] = [];
 
   // Constructor ------------------------------------------------------------ */
 
@@ -38,7 +38,7 @@ class PageRunner {
    * @param {String} pageName Name of page
    * @param {Function} fn Function to run in this page
    */
-  on(pageName: string, fn: Function) {
+  on(pageName: string, fn: (body: HTMLElement) => void) {
     const pages = this.pages.slice();
 
     // Add new page if it hasn't been registered
@@ -63,7 +63,7 @@ class PageRunner {
    * Registers a new global function that runs on all pages
    * @param {Function} fn
    */
-  onAll(fn: Function) {
+  onAll(fn: () => void) {
     this.globals.push(fn);
     return this;
   }
@@ -103,7 +103,7 @@ export namespace PageRunner {
 
   /** Options */
   export interface Options {
-    testFn: TestFunction
+    testFn?: TestFunction
   }
 
   /** Test Function */

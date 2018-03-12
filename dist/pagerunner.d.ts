@@ -18,12 +18,12 @@ declare class PageRunner {
      * @param {String} pageName Name of page
      * @param {Function} fn Function to run in this page
      */
-    on(pageName: string, fn: Function): this;
+    on(pageName: string, fn: (body: HTMLElement) => void): this;
     /**
      * Registers a new global function that runs on all pages
      * @param {Function} fn
      */
-    onAll(fn: Function): this;
+    onAll(fn: () => void): this;
     /**
      * Run pages
      * @param {Function} callbackFn
@@ -34,7 +34,7 @@ export default PageRunner;
 export declare namespace PageRunner {
     /** Options */
     interface Options {
-        testFn: TestFunction;
+        testFn?: TestFunction;
     }
     /** Test Function */
     type TestFunction = (pageName: string, body: HTMLElement) => boolean;
