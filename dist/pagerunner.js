@@ -36,6 +36,7 @@ var __assign = Object.assign || function __assign(t) {
 var PageRunner = /** @class */ (function () {
     // Constructor ------------------------------------------------------------ */
     function PageRunner(options) {
+        if (options === void 0) { options = {}; }
         // Class Properties ------------------------------------------------------- */
         this.options = {};
         this.pages = [];

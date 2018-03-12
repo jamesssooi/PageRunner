@@ -12,7 +12,7 @@ declare class PageRunner {
     options: PageRunner.Options;
     pages: PageRunner.Page[];
     globals: Function[];
-    constructor(options: PageRunner.Options);
+    constructor(options?: PageRunner.Options);
     /**
      * Registers a new page function
      * @param {String} pageName Name of page

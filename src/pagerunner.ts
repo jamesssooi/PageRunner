@@ -27,7 +27,7 @@ class PageRunner {
 
   // Constructor ------------------------------------------------------------ */
 
-  constructor(options: PageRunner.Options) {
+  constructor(options: PageRunner.Options = {}) {
     this.options = { ...PageRunner.defaultOptions, ...options };
   }
 
