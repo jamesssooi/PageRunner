@@ -51,11 +51,16 @@ var PageRunner = /** @class */ (function () {
     PageRunner.prototype.on = function (pageName, fn) {
         var pages = this.pages.slice();
         // Add new page if it hasn't been registered
-        pages.forEach(function (page) {
-            if (page.name === pageName) {
-                pages.push({ name: pageName, resolved: false, functions: [] });
+        var found = false;
+        for (var i = 0; i < pages.length; i++) {
+            if (pages[i].name === pageName) {
+                found = true;
+                break;
             }
-        });
+        }
+        if (!found) {
+            pages.push({ name: pageName, resolved: false, functions: [] });
+        }
         // Register new function
         this.pages = pages.map(function (page) {
             if (page.name === pageName) {
