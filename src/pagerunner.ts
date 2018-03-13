@@ -32,7 +32,9 @@ module PageRunner {
 }
 
 /** PageTestFn implementations determines whether a page should be run. */
-export type PageTestFn = (pageName: string, body: HTMLElement) => boolean;
+export interface PageTestFn {
+  (pageName: string, body: HTMLElement): boolean
+}
 
 
 /* PageRunner Implementation
