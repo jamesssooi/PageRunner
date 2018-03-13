@@ -28,10 +28,19 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /** ========================================================================= *\
- * PageRunner v0.1.0
- * A JavaScript helper library that helps you run page-specific code.
- *
- * @author James Ooi
+ * @module Utilities
+ * ========================================================================== */
+/** findInArray returns the value of the first element that satisfies the predicate. */
+function findInArray(arr, predicate) {
+    arr.forEach(function (val) {
+        if (predicate(val)) {
+            return val;
+        }
+    });
+    return undefined;
+}
+
+/* PageRunner Implementation
  * ========================================================================== */
 var PageRunner = /** @class */ (function () {
     // Constructor ------------------------------------------------------------ */
@@ -44,22 +53,10 @@ var PageRunner = /** @class */ (function () {
         this.options = __assign({}, PageRunner.defaultOptions, options);
     }
     // Public Methods --------------------------------------------------------- */
-    /**
-     * Registers a new page function
-     * @param {String} pageName Name of page
-     * @param {Function} fn Function to run in this page
-     */
     PageRunner.prototype.on = function (pageName, fn) {
         var pages = this.pages.slice();
         // Add new page if it hasn't been registered
-        var found = false;
-        for (var i = 0; i < pages.length; i++) {
-            if (pages[i].name === pageName) {
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
+        if (findInArray(pages, function (page) { return page.name === pageName; }) !== undefined) {
             pages.push({ name: pageName, resolved: false, functions: [] });
         }
         // Register new function
@@ -71,18 +68,10 @@ var PageRunner = /** @class */ (function () {
         });
         return this;
     };
-    /**
-     * Registers a new global function that runs on all pages
-     * @param {Function} fn
-     */
     PageRunner.prototype.onAll = function (fn) {
         this.globals.push(fn);
         return this;
     };
-    /**
-     * Run pages
-     * @param {Function} callbackFn
-     */
     PageRunner.prototype.run = function (callbackFn) {
         var _this = this;
         if (callbackFn === void 0) { callbackFn = null; }
@@ -105,11 +94,13 @@ var PageRunner = /** @class */ (function () {
         }
     };
     // Static Properties ------------------------------------------------------ */
-    /** Function to determine whether a page should be run */
+    /**
+     * testFn is the default page test function that relies on checking the body's
+     * data-page attribute
+     */
     PageRunner.testFn = function (pageName, body) {
         return body.getAttribute('data-page') === pageName;
     };
-    /** Default Options */
     PageRunner.defaultOptions = {
         testFn: PageRunner.testFn
     };

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "main": "dist/pagerunner.js",
-  "typings": "dist/pagerunner.d.ts",
+  "typings": "typings/pagerunner.d.ts",
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "dist": "NODE_ENV=production rollup -c rollup.config.js",

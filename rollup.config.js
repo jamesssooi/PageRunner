@@ -27,6 +27,7 @@ export default {
     /** Compile source using Typescript, using configs from tsconfig.json */
     typescript({
       typescript: require('typescript'),
+      useTsconfigDeclarationDir: true,
     }),
   ]
 

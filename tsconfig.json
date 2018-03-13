@@ -4,6 +4,7 @@
     "module": "es2015",
     "outDir": "build",
     "declaration": true,
+    "declarationDir": "typings"
   },
   "include": [
     "src/**/*"
