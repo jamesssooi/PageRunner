@@ -23,7 +23,7 @@ export interface PageRunnerOptions {
 }
 
 module PageRunner {
-  /** Page describe a regustered page object */
+  /** Page describes a regustered page object */
   export interface Page {
     name: string,
     resolved: boolean,
