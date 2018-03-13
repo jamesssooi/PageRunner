@@ -4,53 +4,75 @@
  * 
  * @author James Ooi
  * ========================================================================== */
+import { findInArray } from './utils';
 
-class PageRunner {
+export interface IPageRunner {
+  /** Registers a new page function */
+  on: (pageName: string, fn: (body: HTMLElement) => void) => IPageRunner;
+
+  /** Registers a global function that runs on all pages */
+  onAll(fn: () => void): void;
+
+  /** Run pages, accepting an optional callback */
+  run(callbackFn?: () => void): void;
+}
+
+export interface PageRunnerOptions {
+  /** Override the default test function to determine whether a page should run */
+  testFn?: PageTestFn
+}
+
+module PageRunner {
+  /** Page describe a regustered page object */
+  export interface Page {
+    name: string,
+    resolved: boolean,
+    functions: Function[]
+  }
+}
+
+/** PageTestFn implementations determines whether a page should be run. */
+export type PageTestFn = (pageName: string, body: HTMLElement) => boolean;
+
+
+/* PageRunner Implementation
+ * ========================================================================== */
+class PageRunner implements IPageRunner {
 
   // Static Properties ------------------------------------------------------ */
 
-  /** Function to determine whether a page should be run */
-  static testFn: PageRunner.TestFunction = (pageName, body) => {
+  /** 
+   * testFn is the default page test function that relies on checking the body's
+   * data-page attribute
+   */
+  static testFn: PageTestFn = (pageName, body) => {
     return body.getAttribute('data-page') === pageName;
   }
 
-  /** Default Options */
-  static defaultOptions: PageRunner.Options = {
+  static defaultOptions: PageRunnerOptions = {
     testFn: PageRunner.testFn
   }
 
   // Class Properties ------------------------------------------------------- */
 
-  options: PageRunner.Options = {};
-  pages: PageRunner.Page[] = [];
-  globals: Function[] = [];
+  public options: PageRunnerOptions = {};
+  private pages: PageRunner.Page[] = [];
+  private globals: Function[] = [];
 
   // Constructor ------------------------------------------------------------ */
 
-  constructor(options: PageRunner.Options = {}) {
+  constructor(options: PageRunnerOptions = {}) {
     this.options = { ...PageRunner.defaultOptions, ...options };
   }
 
   // Public Methods --------------------------------------------------------- */
 
-  /**
-   * Registers a new page function
-   * @param {String} pageName Name of page
-   * @param {Function} fn Function to run in this page
-   */
   on(pageName: string, fn: (body: HTMLElement) => void) {
     const pages = this.pages.slice();
 
     // Add new page if it hasn't been registered
-    let found = false;
-    for (let i = 0; i < pages.length; i++) {
-      if (pages[i].name === pageName) {
-        found = true;
-        break;
-      }
-    }
-    if (!found) {
-      pages.push({ name: pageName, resolved: false, functions: [] })
+    if (findInArray(pages, (page) => page.name === pageName) !== undefined) {
+      pages.push({ name: pageName, resolved: false, functions: [] });
     }
 
     // Register new function
@@ -64,19 +86,11 @@ class PageRunner {
     return this;
   }
 
-  /**
-   * Registers a new global function that runs on all pages
-   * @param {Function} fn
-   */
   onAll(fn: () => void) {
     this.globals.push(fn);
     return this;
   }
 
-  /**
-   * Run pages
-   * @param {Function} callbackFn
-   */
   run(callbackFn: Function = null) {
     // Run global functions
     this.globals.map(fn => fn(document.body));
@@ -100,25 +114,3 @@ class PageRunner {
 }
 
 export default PageRunner;
-
-
-/* Type Declarations
- * ========================================================================== */
-export namespace PageRunner {
-
-  /** Options */
-  export interface Options {
-    testFn?: TestFunction
-  }
-
-  /** Test Function */
-  export type TestFunction = (pageName: string, body: HTMLElement) => boolean;
-
-  /** Page Interface */
-  export interface Page {
-    name: string,
-    resolved: boolean,
-    functions: Function[]
-  }
-
-}
