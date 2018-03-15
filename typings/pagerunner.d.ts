@@ -7,7 +7,7 @@ export interface IPageRunner {
     run(callbackFn?: () => void): void;
 }
 export interface PageRunnerOptions {
-    /** Override the default test function to determine whether a page should run */
+    /** Override the default test function to determine if a page should run */
     testFn?: PageTestFn;
 }
 declare module PageRunner {

@@ -56,7 +56,7 @@ var PageRunner = /** @class */ (function () {
     PageRunner.prototype.on = function (pageName, fn) {
         var pages = this.pages.slice();
         // Add new page if it hasn't been registered
-        if (findInArray(pages, function (page) { return page.name === pageName; }) !== undefined) {
+        if (findInArray(pages, function (page) { return page.name === pageName; }) === undefined) {
             pages.push({ name: pageName, resolved: false, functions: [] });
         }
         // Register new function

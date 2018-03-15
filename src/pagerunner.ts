@@ -18,7 +18,7 @@ export interface IPageRunner {
 }
 
 export interface PageRunnerOptions {
-  /** Override the default test function to determine whether a page should run */
+  /** Override the default test function to determine if a page should run */
   testFn?: PageTestFn
 }
 
@@ -73,7 +73,7 @@ class PageRunner implements IPageRunner {
     const pages = this.pages.slice();
 
     // Add new page if it hasn't been registered
-    if (findInArray(pages, (page) => page.name === pageName) !== undefined) {
+    if (findInArray(pages, (page) => page.name === pageName) === undefined) {
       pages.push({ name: pageName, resolved: false, functions: [] });
     }
 
